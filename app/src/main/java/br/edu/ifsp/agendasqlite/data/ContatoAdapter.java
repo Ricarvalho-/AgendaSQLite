@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -112,7 +113,7 @@ public class ContatoAdapter
                 } else {
                     List<Contato> filteredList = new ArrayList<>();
                     for (Contato row : contatos) {
-                        if (row.getNome().toLowerCase().contains(charString.toLowerCase()) ) {
+                        if (anyValueContains(Arrays.asList(row.getNome(), row.getEmail()), charString)) {
                             filteredList.add(row);
                         }
                     }
@@ -123,6 +124,13 @@ public class ContatoAdapter
                 filterResults.values = contactListFiltered;
                 return filterResults;
 
+            }
+
+            private boolean anyValueContains(List<String> values, String content) {
+                for (String value : values) {
+                    if (value.toLowerCase().contains(content.toLowerCase())) return true;
+                }
+                return false;
             }
 
             @Override
