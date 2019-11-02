@@ -47,6 +47,7 @@ public class ContatoDAO {
            c.setFone(cursor.getString(2));
            c.setEmail(cursor.getString(3));
            c.setFavorito(cursor.getInt(4) == TRUE);
+           c.setFone2(cursor.getString(5));
 
            contatos.add(c);
         }
@@ -78,6 +79,7 @@ public class ContatoDAO {
         values.put(SQLiteHelper.KEY_FONE, c.getFone());
         values.put(SQLiteHelper.KEY_EMAIL, c.getEmail());
         values.put(SQLiteHelper.KEY_FAVORITO, c.isFavorito() ? TRUE : FALSE);
+        values.put(SQLiteHelper.KEY_FONE2, c.getFone2());
         return values;
     }
 
