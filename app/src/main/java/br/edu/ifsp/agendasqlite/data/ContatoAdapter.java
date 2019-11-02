@@ -1,11 +1,11 @@
 package br.edu.ifsp.agendasqlite.data;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -91,7 +91,9 @@ public class ContatoAdapter
 
     @Override
     public void onBindViewHolder(@NonNull ContatoViewHolder holder, int position) {
-            holder.nome.setText(contactListFiltered.get(position).getNome());
+        Contato contato = contactListFiltered.get(position);
+        holder.nome.setText(contato.getNome());
+        holder.favoriteButton.setImageResource(contato.isFavorito() ? android.R.drawable.btn_star_big_on : android.R.drawable.btn_star_big_off);
     }
 
     @Override
@@ -138,10 +140,19 @@ public class ContatoAdapter
             implements View.OnClickListener
     {
         final TextView nome;
+        final ImageButton favoriteButton;
 
         public ContatoViewHolder(@NonNull View itemView) {
             super(itemView);
             nome = (TextView) itemView.findViewById(R.id.nome);
+            favoriteButton = itemView.findViewById(R.id.favoriteButton);
+            favoriteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (clickListener!=null)
+                        clickListener.onItemFavoriteClick(getAdapterPosition());
+                }
+            });
             itemView.setOnClickListener(this);
         }
 
@@ -156,6 +167,7 @@ public class ContatoAdapter
     public  interface ItemClickListener
     {
         void onItemClick(int position);
+        void onItemFavoriteClick(int position);
     }
 
 

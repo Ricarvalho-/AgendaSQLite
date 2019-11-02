@@ -10,6 +10,9 @@ import java.util.List;
 
 import br.edu.ifsp.agendasqlite.model.Contato;
 
+import static br.edu.ifsp.agendasqlite.data.SQLiteHelper.FALSE;
+import static br.edu.ifsp.agendasqlite.data.SQLiteHelper.TRUE;
+
 public class ContatoDAO {
 
     SQLiteDatabase database;
@@ -43,6 +46,7 @@ public class ContatoDAO {
            c.setNome(cursor.getString(1));
            c.setFone(cursor.getString(2));
            c.setEmail(cursor.getString(3));
+           c.setFavorito(cursor.getInt(4) == TRUE);
 
            contatos.add(c);
         }
@@ -59,10 +63,7 @@ public class ContatoDAO {
 
         database = dbHelper.getWritableDatabase();
 
-        ContentValues values = new ContentValues();
-        values.put(SQLiteHelper.KEY_NOME, c.getNome());
-        values.put(SQLiteHelper.KEY_FONE, c.getFone());
-        values.put(SQLiteHelper.KEY_EMAIL, c.getEmail());
+        ContentValues values = contentValuesFromContato(c);
 
         long id = database.insert(SQLiteHelper.TABLE_NAME, null, values);
 
@@ -71,14 +72,20 @@ public class ContatoDAO {
 
     }
 
-    public void alterarContato(Contato c)
-    {
-        database = dbHelper.getWritableDatabase();
-
+    private ContentValues contentValuesFromContato(Contato c) {
         ContentValues values = new ContentValues();
         values.put(SQLiteHelper.KEY_NOME, c.getNome());
         values.put(SQLiteHelper.KEY_FONE, c.getFone());
         values.put(SQLiteHelper.KEY_EMAIL, c.getEmail());
+        values.put(SQLiteHelper.KEY_FAVORITO, c.isFavorito() ? TRUE : FALSE);
+        return values;
+    }
+
+    public void alterarContato(Contato c)
+    {
+        database = dbHelper.getWritableDatabase();
+
+        ContentValues values = contentValuesFromContato(c);
 
         database.update(SQLiteHelper.TABLE_NAME, values,
                      SQLiteHelper.KEY_ID +"=" +c.getId(),null);

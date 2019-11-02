@@ -70,6 +70,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(i,2);
 
             }
+
+            @Override
+            public void onItemFavoriteClick(int position) {
+                final Contato c = adapter.getContactListFiltered().get(position);
+                c.setFavorito(!c.isFavorito());
+                dao.alterarContato(c);
+                adapter.atualizaContatoAdapter(c);
+            }
         });
 
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT) {
